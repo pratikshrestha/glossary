@@ -1,4 +1,4 @@
-﻿=== SAML Single Sign On – SSO Login ===
+﻿=== WordPress Glossary Plugin ===
 Contributors: pratikshrestha
 Tags: Glossary
 Requires at least: 3.7
