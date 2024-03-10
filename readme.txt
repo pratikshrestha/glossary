@@ -8,8 +8,8 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-WordPress Glossary plugin in its initial state.
+Creates a glossary with custom post type. This is in its initial phase of development.
 
 == Description ==
 
-WordPress Glossary plugin in its initial state.
+Creates a glossary with custom post type. This is in its initial phase of development.
