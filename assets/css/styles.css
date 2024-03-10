@@ -1,0 +1,107 @@
+/*
+Plugin Name: OP Glossary Plugin
+Plugin URI: https://outpaceseo.com/glossary-plugin
+Description: Creates a glossary with custom post type.
+Version: 1.0
+Author: Your Name
+Author URI: https://outpaceseo.com
+License: GPL-2.0+
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+Text Domain: op-glossary
+*/
+
+.op-glossary .btn,
+.op-glossary input {
+    padding: 10px 24px;
+    border: 2px solid #6b7280;
+    border-radius: 4px;
+}
+
+.op-glossary form {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    color: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding: 8px;
+    width: 100%;
+}
+
+.op-glossary-list dt {
+    float: left;
+}
+
+.op-glossary-list dd {
+    margin-bottom: 16px;
+}
+
+.op-glossary-list dt a {
+    text-decoration: none;
+}
+
+
+.op-glossary-pagination {
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+    margin: 32px 0;
+    font-size: 18px;
+}
+
+.op-glossary-pagination-list {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    
+}
+
+.pbl-section .op-glossary-pagination-list li {
+    margin: 0 5px;
+    border-right: 1px solid gray;
+    padding: 4px;
+    margin: 0;
+}
+
+.op-glossary-pagination-list li:last-child {
+    border-right: none;
+}
+
+.op-glossary-pagination-list li::before {
+    content: none !important;
+}
+
+.op-glossary-pagination-list a {
+    display: inline-block;
+    padding: 0 12px;
+    text-decoration: none;
+    color: #333;
+}
+
+.op-glossary-pagination-list li.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.op-glossary-pagination-list li.active a{
+    color: #fff;
+}
+
+.op-glossary-pagination-list a.prev,
+.op-glossary-pagination-list a.next {
+    font-weight: bold;
+}
+
+.op-glossary-pagination-list a.prev:hover,
+.op-glossary-pagination-list a.next:hover {
+    background-color: #f0f0f0;
+}
+
+.op-glossary-pagination-list a.page:hover {
+    background-color: #f0f0f0;
+}
