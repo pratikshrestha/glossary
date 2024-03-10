@@ -3,7 +3,7 @@
 Plugin Name: OP Glossary Plugin
 Description: Creates a glossary with custom post type. This is in its initial phase of development.
 Author: Outpace
-Author URI: https://outpaceseo.com
+Author URI: https://pratik-shrestha.com.np
 Version: 1.0
 */
 
