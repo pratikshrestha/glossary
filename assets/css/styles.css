@@ -1,6 +1,6 @@
 /*
 Plugin Name: OP Glossary Plugin
-Version: 1.00.10
+Version: 1.00.11
 Author: Outpace
 License: GPL-2.0+
 Text Domain: op-glossary
@@ -54,14 +54,7 @@ Text Domain: op-glossary
     color: var(--op-glossary-ink);
 }
 
-.op-glossary__demo-note {
-    margin: 10px 0 0;
-    color: var(--op-glossary-muted);
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.op-glossary form.op-glossary-search-form {
+.op-glossary .op-glossary-search-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -74,6 +67,7 @@ Text Domain: op-glossary
     border: 1px solid var(--op-glossary-line);
     border-radius: 18px;
     box-shadow: var(--op-glossary-shadow);
+    margin-bottom: 24px;
 }
 
 .op-glossary-search-form__label {
@@ -252,21 +246,6 @@ Text Domain: op-glossary
 
 .op-glossary-list dt a:hover {
     color: var(--op-glossary-accent);
-}
-
-.op-glossary-list__demo-chip {
-    display: inline-flex;
-    align-items: center;
-    margin-right: 10px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: rgba(27, 101, 214, 0.08);
-    color: var(--op-glossary-accent);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    vertical-align: middle;
 }
 
 .op-glossary-list dd {
