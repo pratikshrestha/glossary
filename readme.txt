@@ -4,7 +4,7 @@ Tags: glossary, definitions, custom post type, shortcode
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.02
+Stable tag: 1.0.03
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -106,6 +106,10 @@ If routes do not work immediately, visit `Settings > Permalinks` and click `Save
 
 == Changelog ==
 
+= 1.0.03 =
+
+* Release package update
+
 = 1.0.02 =
 
 * Release package update
@@ -114,7 +118,7 @@ If routes do not work immediately, visit `Settings > Permalinks` and click `Save
 
 * Release package update
 
-= 1.1.0 =
+= 1.0.0 =
 
 * Added glossary single-term template support
 * Changed glossary term URLs to use the `/glossary/` base
