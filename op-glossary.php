@@ -4,7 +4,7 @@ Plugin Name: OP Glossary Plugin
 Description: Creates a glossary with custom post type. This is in its initial phase of development.
 Author: Outpace
 Author URI: https://pratik-shrestha.com.np
-Version: 1.00.08
+Version: 1.00.09
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define Plugin Constants
-define( 'OP_GLOSSARY_VERSION', '1.00.08' );
+define( 'OP_GLOSSARY_VERSION', '1.00.09' );
 define( 'OP_GLOSSARY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OP_GLOSSARY_URL', plugin_dir_url( __FILE__ ) );
 
