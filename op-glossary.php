@@ -4,7 +4,7 @@ Plugin Name: OP Glossary Plugin
 Description: Creates a glossary with custom post type. This is in its initial phase of development.
 Author: Outpace
 Author URI: https://pratik-shrestha.com.np
-Version: 1.0.03
+Version: 1.00.04
 */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define Plugin Constants
-define( 'OP_GLOSSARY_VERSION', '1.0.03' );
+define( 'OP_GLOSSARY_VERSION', '1.00.04' );
 define( 'OP_GLOSSARY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'OP_GLOSSARY_URL', plugin_dir_url( __FILE__ ) );
 
@@ -56,7 +56,10 @@ function op_glossary_register_post_type() {
         'public'       => true,
         'has_archive'  => false,
         'show_in_rest' => true,
-        'rewrite'      => array( 'slug' => 'glossary' ),
+        'rewrite'      => array(
+            'slug'       => 'glossary',
+            'with_front' => false,
+        ),
         'supports'     => array( 'title', 'editor', 'excerpt', 'thumbnail' ),
     );
 
@@ -204,6 +207,17 @@ function op_glossary_shortcode( $atts ) {
     $query = new WP_Query( $args );
     remove_filter( 'posts_where', 'op_glossary_posts_where', 10 );
 
+    $demo_terms = array();
+    $is_demo    = false;
+
+    if ( ! op_glossary_has_published_terms() ) {
+        $search_term        = isset( $args['s'] ) ? $args['s'] : '';
+        $selected_letter    = isset( $args['starts_with'] ) ? $args['starts_with'] : '';
+        $demo_terms         = op_glossary_get_filtered_demo_terms( $search_term, $selected_letter );
+        $first_letters_array = op_glossary_get_demo_term_letters( $demo_terms ? $demo_terms : op_glossary_get_demo_terms() );
+        $is_demo            = true;
+    }
+
     wp_enqueue_style( 'op-glossary-styles' );
     wp_enqueue_script( 'op-glossary-js' );
     
@@ -221,6 +235,171 @@ function op_glossary_shortcode( $atts ) {
     return ob_get_clean();
 }
 add_shortcode( 'op-glossary', 'op_glossary_shortcode' );
+
+/**
+ * Check whether there are published glossary terms available.
+ *
+ * @return bool
+ */
+function op_glossary_has_published_terms() {
+    $counts = wp_count_posts( 'op_glossary_term' );
+
+    return ! empty( $counts->publish );
+}
+
+/**
+ * Return demo glossary terms for placeholder rendering.
+ *
+ * @return array[]
+ */
+function op_glossary_get_demo_terms() {
+    return array(
+        array(
+            'title'   => 'Anchor Text',
+            'content' => 'Clickable text in a hyperlink that gives users and search engines context about the destination page.',
+        ),
+        array(
+            'title'   => 'Backlinks',
+            'content' => 'Links from one website to another. High-quality backlinks can strengthen authority and improve search visibility.',
+        ),
+        array(
+            'title'   => 'Crawl Budget',
+            'content' => 'The amount of time and resources search engines are likely to spend crawling a website within a given period.',
+        ),
+        array(
+            'title'   => 'Domain Authority',
+            'content' => 'A comparative authority metric often used to estimate how competitive a domain may be in search relative to others.',
+        ),
+        array(
+            'title'   => 'E-E-A-T',
+            'content' => 'Experience, Expertise, Authoritativeness, and Trustworthiness. A quality framework often used when evaluating content credibility.',
+        ),
+        array(
+            'title'   => 'Featured Snippet',
+            'content' => 'A highlighted answer shown near the top of search results that aims to satisfy a query directly on the results page.',
+        ),
+        array(
+            'title'   => 'Search Intent',
+            'content' => 'The reason behind a query, such as learning, comparing, or taking action, which guides how content should be structured.',
+        ),
+        array(
+            'title'   => 'Technical SEO',
+            'content' => 'Optimization work focused on crawlability, indexability, site performance, structured data, and other technical foundations.',
+        ),
+    );
+}
+
+/**
+ * Filter demo terms by search and selected starting letter.
+ *
+ * @param string $search Search term.
+ * @param string $letter Selected starting letter.
+ * @return array[]
+ */
+function op_glossary_get_filtered_demo_terms( $search = '', $letter = '' ) {
+    $terms  = op_glossary_get_demo_terms();
+    $search = trim( (string) $search );
+    $letter = trim( (string) $letter );
+
+    return array_values(
+        array_filter(
+            $terms,
+            function( $term ) use ( $search, $letter ) {
+                $title   = isset( $term['title'] ) ? (string) $term['title'] : '';
+                $content = isset( $term['content'] ) ? wp_strip_all_tags( (string) $term['content'] ) : '';
+
+                if ( $letter && 0 !== stripos( $title, $letter ) ) {
+                    return false;
+                }
+
+                if ( '' === $search ) {
+                    return true;
+                }
+
+                $haystack = strtolower( $title . ' ' . $content );
+
+                return false !== strpos( $haystack, strtolower( $search ) );
+            }
+        )
+    );
+}
+
+/**
+ * Get the available first letters from a list of demo terms.
+ *
+ * @param array[] $terms Demo terms.
+ * @return string[]
+ */
+function op_glossary_get_demo_term_letters( $terms ) {
+    $letters = array();
+
+    foreach ( $terms as $term ) {
+        if ( empty( $term['title'] ) ) {
+            continue;
+        }
+
+        $letters[] = strtoupper( substr( (string) $term['title'], 0, 1 ) );
+    }
+
+    $letters = array_values( array_unique( $letters ) );
+    sort( $letters );
+
+    return $letters;
+}
+
+/**
+ * Render glossary items from query posts or demo terms.
+ *
+ * @param WP_Query|array[] $items   Query object or demo term array.
+ * @param bool             $is_demo Whether the rendered content is a demo fallback.
+ * @return string
+ */
+function op_glossary_render_term_list( $items, $is_demo = false ) {
+    ob_start();
+
+    if ( $is_demo ) {
+        if ( empty( $items ) ) {
+            echo '<p class="op-glossary-no-results">' . esc_html__( 'No glossary terms found.', 'op-glossary' ) . '</p>';
+
+            return ob_get_clean();
+        }
+
+        echo '<dl class="op-glossary-list">';
+
+        foreach ( $items as $term ) {
+            echo '<div class="op-glossary-list__item op-glossary-list__item--demo">';
+            echo '<dt><span class="op-glossary-list__demo-chip">' . esc_html__( 'Demo', 'op-glossary' ) . '</span>' . esc_html( $term['title'] ) . '</dt>';
+            echo '<dd>' . wp_kses_post( wpautop( $term['content'] ) ) . '</dd>';
+            echo '</div>';
+        }
+
+        echo '</dl>';
+
+        return ob_get_clean();
+    }
+
+    if ( ! ( $items instanceof WP_Query ) || ! $items->have_posts() ) {
+        echo '<p class="op-glossary-no-results">' . esc_html__( 'No glossary terms found.', 'op-glossary' ) . '</p>';
+
+        return ob_get_clean();
+    }
+
+    echo '<dl class="op-glossary-list">';
+
+    while ( $items->have_posts() ) {
+        $items->the_post();
+        echo '<div class="op-glossary-list__item">';
+        echo '<dt><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></dt>';
+        echo '<dd>' . wp_kses_post( get_the_content() ) . '</dd>';
+        echo '</div>';
+    }
+
+    echo '</dl>';
+
+    wp_reset_postdata();
+
+    return ob_get_clean();
+}
 
 /**
  * Handle AJAX search requests.
@@ -248,19 +427,11 @@ function op_glossary_search_ajax() {
     $query = new WP_Query( $args );
     remove_filter( 'posts_where', 'op_glossary_posts_where', 10 );
 
-    ob_start();
-    if ( $query->have_posts() ) {
-        echo '<dl class="op-glossary-list">';
-        while ( $query->have_posts() ) {
-            $query->the_post();
-            echo '<dt><a href="' . esc_url( get_permalink() ) . '">' . esc_html( get_the_title() ) . '</a></dt>';
-            echo '<dd>' . wp_kses_post( get_the_content() ) . '</dd>';
-        }
-        echo '</dl>';
+    if ( op_glossary_has_published_terms() ) {
+        $html = op_glossary_render_term_list( $query );
     } else {
-        echo '<p class="op-glossary-no-results">' . esc_html__( 'No glossary terms found.', 'op-glossary' ) . '</p>';
+        $html = op_glossary_render_term_list( op_glossary_get_filtered_demo_terms( $search, $letter ), true );
     }
-    $html = ob_get_clean();
 
     wp_send_json_success( array( 'html' => $html ) );
 }

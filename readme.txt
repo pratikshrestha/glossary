@@ -4,7 +4,7 @@ Tags: glossary, definitions, custom post type, shortcode
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.03
+Stable tag: 1.00.04
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -79,8 +79,8 @@ Breadcrumbs are intentionally not rendered by the plugin. Add them in your theme
 A local release builder is included for packaging the plugin:
 
 * Script: `builder/build-release.sh`
-* Output: `dist/glossary-1.0.xx.zip`
-* Behavior: bumps the plugin version to the next `1.0.xx` release, prepends a changelog entry, creates the zip, and commits the tracked version changes with a release message
+* Output: `dist/glossary-1.00.xx.zip`
+* Behavior: bumps the plugin version to the next `1.00.xx` release, prepends a changelog entry, creates the zip, and commits the tracked version changes with a release message
 
 Examples:
 
@@ -105,6 +105,10 @@ The plugin registers glossary terms under the `glossary` rewrite base for cleane
 If routes do not work immediately, visit `Settings > Permalinks` and click `Save Changes` once to refresh rewrite rules.
 
 == Changelog ==
+
+= 1.00.04 =
+
+* Release package update
 
 = 1.0.03 =
 
