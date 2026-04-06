@@ -1,6 +1,6 @@
 /*
 Plugin Name: OP Glossary Plugin
-Version: 1.00.06
+Version: 1.00.07
 Author: Outpace
 License: GPL-2.0+
 Text Domain: op-glossary
@@ -62,16 +62,34 @@ Text Domain: op-glossary
 }
 
 .op-glossary form.op-glossary-search-form {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 249, 252, 0.98));
     border: 1px solid var(--op-glossary-line);
     border-radius: 18px;
     box-shadow: var(--op-glossary-shadow);
+}
+
+.op-glossary-search-form__label {
+    color: var(--op-glossary-ink);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.op-glossary-search-form__field {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    min-height: 60px;
+    padding: 8px 8px 8px 14px;
+    border: 1px solid rgba(16, 32, 51, 0.14);
+    border-radius: 16px;
+    background: #ffffff;
 }
 
 .op-glossary-search-form__icon {
@@ -95,24 +113,29 @@ Text Domain: op-glossary
 .op-glossary form.op-glossary-search-form input[type="text"] {
     width: 100%;
     min-width: 0;
-    padding: 4px 0;
-    border: none;
+    min-height: 42px;
+    padding: 0;
+    border: none !important;
     outline: none;
-    background: transparent;
+    background: transparent !important;
     color: var(--op-glossary-ink);
-    box-shadow: none;
+    box-shadow: none !important;
+    appearance: none;
 }
 
 .op-glossary form.op-glossary-search-form input[type="text"]::placeholder {
     color: var(--op-glossary-muted);
 }
 
-.op-glossary form.op-glossary-search-form .btn {
-    min-height: 46px;
-    padding: 0 22px;
-    border: none;
-    border-radius: 999px;
-    background: linear-gradient(135deg, var(--op-glossary-accent), var(--op-glossary-accent-dark));
+    .op-glossary form.op-glossary-search-form .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 22px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--op-glossary-accent), var(--op-glossary-accent-dark));
     color: #fff;
     font-weight: 700;
     cursor: pointer;
@@ -198,11 +221,10 @@ Text Domain: op-glossary
 
 .op-glossary-list__item {
     padding: 26px 0 28px;
-    border-top: 1px solid var(--op-glossary-line);
 }
 
-.op-glossary-list__item:last-child {
-    border-bottom: 1px solid var(--op-glossary-line);
+.op-glossary-list__item + .op-glossary-list__item {
+    border-top: 1px solid var(--op-glossary-line);
 }
 
 .op-glossary-list dt {
@@ -384,7 +406,12 @@ Text Domain: op-glossary
     }
 
     .op-glossary form.op-glossary-search-form {
+        padding: 14px;
+    }
+
+    .op-glossary-search-form__field {
         grid-template-columns: auto minmax(0, 1fr);
+        padding: 10px 10px 10px 14px;
     }
 
     .op-glossary form.op-glossary-search-form .btn {
