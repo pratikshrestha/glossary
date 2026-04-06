@@ -4,7 +4,7 @@ Tags: glossary, definitions, custom post type, shortcode
 Requires at least: 5.8
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.01
+Stable tag: 1.0.02
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -105,6 +105,10 @@ The plugin registers glossary terms under the `glossary` rewrite base for cleane
 If routes do not work immediately, visit `Settings > Permalinks` and click `Save Changes` once to refresh rewrite rules.
 
 == Changelog ==
+
+= 1.0.02 =
+
+* Release package update
 
 = 1.0.01 =
 
