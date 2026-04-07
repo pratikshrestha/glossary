@@ -4,12 +4,14 @@ Plugin Name: OP Glossary Plugin
 Description: Creates a glossary with custom post type. This is in its initial phase of development.
 Author: Outpace
 Author URI: https://pratik-shrestha.com.np
-Version: 1.00.12
+Version: 1.00.13
 */
 
 if (! defined('ABSPATH')) {
     exit;
 }
+
+
 
 // Define Plugin Constants
 define('OP_GLOSSARY_VERSION', '1.00.11');
@@ -71,7 +73,6 @@ function op_glossary_register_post_type() {
         'rewrite'      => array(
             'slug'       => 'glossary',
             'with_front' => false,
-            'with_front' => false,
         ),
         'supports'     => array('title', 'editor', 'excerpt', 'thumbnail'),
     );
@@ -117,6 +118,42 @@ function op_glossary_rename_excerpt_label($labels) {
     return $labels;
 }
 add_filter('post_type_labels_op_glossary_term', 'op_glossary_rename_excerpt_label');
+
+/**
+ * Rename 'Excerpt' and its description in all admin corners for Glossary Terms.
+ */
+function op_glossary_rename_excerpt_gettext($translation, $text, $domain) {
+    if (! is_admin() || ! function_exists('get_current_screen')) {
+        return $translation;
+    }
+
+    $screen = get_current_screen();
+    if (! $screen || 'op_glossary_term' !== $screen->post_type) {
+        return $translation;
+    }
+
+    if ('Excerpt' === $text) {
+        return esc_html__('Short Definition(Shown on Glossary Page)', 'op-glossary');
+    }
+
+    if (strpos($text, 'summaries of your content that can be used in your theme') !== false) {
+        return esc_html__('Short definition displayed on the main glossary index page.', 'op-glossary');
+    }
+
+    return $translation;
+}
+add_filter('gettext', 'op_glossary_rename_excerpt_gettext', 10, 3);
+
+/**
+ * Explicitly rename the Excerpt metabox title in Classic Editor.
+ */
+function op_glossary_rename_excerpt_metabox_title() {
+    if (function_exists('remove_meta_box')) {
+        remove_meta_box('postexcerpt', 'op_glossary_term', 'normal');
+        add_meta_box('postexcerpt', esc_html__('Short Definition(Shown on Glossary Page)', 'op-glossary'), 'post_excerpt_meta_box', 'op_glossary_term', 'normal', 'high');
+    }
+}
+add_action('add_meta_boxes', 'op_glossary_rename_excerpt_metabox_title');
 
 /**
  * The function `op_glossary_enqueue_assets` registers and enqueues CSS and JS files for the plugin.
@@ -372,6 +409,25 @@ function op_glossary_first_letters_of_titles($args) {
          ORDER BY first_letter ASC"
     );
 
+    $alphabetic = [];
+    $has_special = false;
+
+    foreach ($results as $letter) {
+        if (preg_match('/[A-Z]/i', $letter)) {
+            $alphabetic[] = strtoupper($letter);
+        } else {
+            $has_special = true;
+        }
+    }
+
+    sort($alphabetic);
+
+    if ($has_special) {
+        $alphabetic[] = '#';
+    }
+
+    $results = $alphabetic;
+
     // Cache the result for 24 hours outside of dev mode.
     if (! op_glossary_is_dev_mode()) {
         set_transient($cache_key, $results, DAY_IN_SECONDS);
@@ -415,14 +471,31 @@ function op_glossary_posts_where($where, $query) {
     $starts_with = $query->get('starts_with');
 
     if ($starts_with) {
-        $where .= $wpdb->prepare(
-            " AND LOWER($wpdb->posts.post_title) LIKE LOWER(%s)",
-            $wpdb->esc_like($starts_with) . '%'
-        );
+        if ('#' === $starts_with) {
+            $where .= " AND $wpdb->posts.post_title NOT REGEXP '^[a-zA-Z]'";
+        } else {
+            $where .= $wpdb->prepare(
+                " AND LOWER($wpdb->posts.post_title) LIKE LOWER(%s)",
+                $wpdb->esc_like($starts_with) . '%'
+            );
+        }
     }
 
     return $where;
 }
+
+/**
+ * Fix alphabetical ordering to put numbers and special characters at the end.
+ */
+function op_glossary_posts_orderby($orderby, $query) {
+    if ('op_glossary_term' !== $query->get('post_type')) {
+        return $orderby;
+    }
+
+    global $wpdb;
+    return "( {$wpdb->posts}.post_title REGEXP '^[a-zA-Z]' ) DESC, {$wpdb->posts}.post_title ASC";
+}
+add_filter('posts_orderby', 'op_glossary_posts_orderby', 10, 2);
 
 /**
  * Get the adjacent glossary term ordered alphabetically by title.

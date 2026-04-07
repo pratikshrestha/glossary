@@ -1,6 +1,6 @@
 /*
 Plugin Name: OP Glossary Plugin
-Version: 1.00.12
+Version: 1.00.13
 Author: Outpace
 License: GPL-2.0+
 Text Domain: op-glossary
@@ -448,7 +448,6 @@ Text Domain: op-glossary
 .op-glossary-single__intro {
     position: relative;
     z-index: 1;
-    max-width: 760px;
     margin-top: 24px;
     padding: 22px 24px;
     border: 1px solid rgba(16, 32, 51, 0.08);
@@ -466,7 +465,7 @@ Text Domain: op-glossary
 }
 
 .op-glossary-single__summary {
-    max-width: 44rem;
+    /* max-width: 44rem; */
     margin: 0;
     color: var(--op-glossary-text);
     font-size: clamp(1.02rem, 0.95rem + 0.18vw, 1.15rem);
@@ -671,7 +670,6 @@ Text Domain: op-glossary
 }
 
 .glossary-term {
-    max-width: 760px;
     margin: 0 auto;
     padding: 40px 20px 60px;
 
