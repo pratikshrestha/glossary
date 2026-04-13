@@ -1,0 +1,4 @@
+builder/
+dist/
+*.zip
+.sftpignore
