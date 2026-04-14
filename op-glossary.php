@@ -263,9 +263,15 @@ function op_glossary_shortcode($atts) {
     $first_letters_array = op_glossary_first_letters_of_titles($args);
 
     // Scope the start-with filter only to the glossary query
+    if (isset($_GET['op_glossary_search'])) {
+        add_filter('posts_search', 'op_glossary_search_only_title', 10, 2);
+    }
     add_filter('posts_where', 'op_glossary_posts_where', 10, 2);
     $query = new WP_Query($args);
     remove_filter('posts_where', 'op_glossary_posts_where', 10);
+    if (isset($_GET['op_glossary_search'])) {
+        remove_filter('posts_search', 'op_glossary_search_only_title', 10);
+    }
 
     wp_enqueue_style('op-glossary-styles');
     wp_enqueue_script('op-glossary-js');
@@ -351,9 +357,15 @@ function op_glossary_search_ajax() {
         $args['starts_with'] = $letter;
     }
 
+    if ($search) {
+        add_filter('posts_search', 'op_glossary_search_only_title', 10, 2);
+    }
     add_filter('posts_where', 'op_glossary_posts_where', 10, 2);
     $query = new WP_Query($args);
     remove_filter('posts_where', 'op_glossary_posts_where', 10);
+    if ($search) {
+        remove_filter('posts_search', 'op_glossary_search_only_title', 10);
+    }
 
     $html = op_glossary_render_term_list($query);
 
@@ -482,6 +494,24 @@ function op_glossary_posts_where($where, $query) {
     }
 
     return $where;
+}
+
+/**
+ * Modify the posts_search to search only in title.
+ *
+ * @param string   $search The search SQL.
+ * @param WP_Query $wp_query The query object.
+ * @return string The modified search SQL.
+ */
+function op_glossary_search_only_title($search, $wp_query) {
+    global $wpdb;
+
+    if ($wp_query->get('s')) {
+        $search_term = $wp_query->get('s');
+        $search = $wpdb->prepare(" AND ($wpdb->posts.post_title LIKE %s)", '%' . $wpdb->esc_like($search_term) . '%');
+    }
+
+    return $search;
 }
 
 /**

@@ -434,16 +434,15 @@ Text Domain: op-glossary
     margin-bottom: 16px;
 }
 
-.op-glossary-single__title {
+/* .op-glossary-single__title {
     position: relative;
     z-index: 1;
     margin: 0;
-    max-width: 14ch;
     color: var(--op-glossary-ink);
     font-size: clamp(2.35rem, 2rem + 1.35vw, 4rem);
     line-height: 0.98;
     letter-spacing: -0.03em;
-}
+} */
 
 .op-glossary-single__intro {
     position: relative;
@@ -645,9 +644,9 @@ Text Domain: op-glossary
         border-radius: 24px;
     }
 
-    .op-glossary-single__title {
+    /* .op-glossary-single__title {
         max-width: none;
-    }
+    } */
 
     .op-glossary-single__intro {
         padding: 18px;
@@ -732,4 +731,58 @@ Text Domain: op-glossary
             text-decoration: none;
         }
     }
+}
+
+/* Single Glossary Term Styles */
+/* .op-glossary-single__title {
+    color: var(--op-glossary-ink);
+    letter-spacing: -0.03em;
+} */
+
+.op-glossary-single__intro {
+    background: var(--op-glossary-surface-alt);
+    box-shadow: var(--op-glossary-shadow);
+}
+
+.op-glossary-single__intro-label {
+    color: var(--op-glossary-accent) !important;
+    font-size: 13px !important;
+    letter-spacing: 0.1em !important;
+}
+
+.op-glossary-single__summary {
+    color: var(--op-glossary-ink);
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    line-height: 1.6;
+}
+
+.op-glossary-single__hr {
+    border-color: var(--op-glossary-line) !important;
+    opacity: 1 !important;
+}
+
+.glossary-nav {
+    min-width: 275px;
+    max-width: 350px !important;
+    width: fit-content !important;
+    background: var(--op-glossary-surface-alt);
+    border: 1px solid var(--op-glossary-line);
+    transition: all 0.2s ease;
+}
+
+.glossary-nav:hover {
+    background: var(--op-glossary-surface-alt);
+    border-color: var(--op-glossary-accent);
+    transform: translateY(-2px);
+}
+
+.glossary-nav__label {
+    color: var(--op-glossary-accent);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+}
+
+.glossary-nav__title {
+    color: var(--op-glossary-ink);
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
 }
