@@ -17,7 +17,7 @@ $search_term  = isset($_GET['op_glossary_search']) ? sanitize_text_field(wp_unsl
 $result_count = (int) $query->post_count;
 $active_letter = isset($_GET['op-glossary-pagination']) ? sanitize_text_field(wp_unslash($_GET['op-glossary-pagination'])) : '';
 ?>
-<div class="op-glossary">
+<div class="op-glossary"><!-- PLUGIN TEMPLATE -->
     <div class="op-glossary__controls">
         <form class="op-glossary-search-form" role="search" aria-label="<?php esc_attr_e('Search terms', 'op-glossary'); ?>" method="get">
             <div class="op-glossary-search-form__header">
