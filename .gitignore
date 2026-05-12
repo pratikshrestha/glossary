@@ -2,3 +2,6 @@ builder/
 dist/
 *.zip
 .sftpignore
+.DS_Store
+.eslintrc.json
+phpcs.xml
