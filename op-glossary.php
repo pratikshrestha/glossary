@@ -159,15 +159,23 @@ add_action('add_meta_boxes', 'op_glossary_rename_excerpt_metabox_title');
  * The function `op_glossary_enqueue_assets` registers and enqueues CSS and JS files for the plugin.
  */
 function op_glossary_enqueue_assets() {
-    $styles_file = 'assets/css/styles.css';
+    $styles_file = op_glossary_is_dev_mode() ? 'assets/css/styles.css' : 'assets/css/styles.min.css';
     $styles_path = OP_GLOSSARY_PATH . $styles_file;
+    if (! file_exists($styles_path)) {
+        $styles_file = 'assets/css/styles.css';
+        $styles_path = OP_GLOSSARY_PATH . $styles_file;
+    }
     $styles_url  = OP_GLOSSARY_URL  . $styles_file;
     $styles_ver  = file_exists($styles_path) ? filemtime($styles_path) : OP_GLOSSARY_VERSION;
 
     wp_register_style('op-glossary-styles', $styles_url, array(), $styles_ver);
 
-    $js_file = 'assets/js/glossary.js';
+    $js_file = op_glossary_is_dev_mode() ? 'assets/js/glossary.js' : 'assets/js/glossary.min.js';
     $js_path = OP_GLOSSARY_PATH . $js_file;
+    if (! file_exists($js_path)) {
+        $js_file = 'assets/js/glossary.js';
+        $js_path = OP_GLOSSARY_PATH . $js_file;
+    }
     $js_url  = OP_GLOSSARY_URL  . $js_file;
     $js_ver  = file_exists($js_path) ? filemtime($js_path) : OP_GLOSSARY_VERSION;
 
